@@ -1,0 +1,393 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  color: #fff;
+}
+
+body {
+  min-height: 100vh;
+  background-color: azure;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem 0.5rem;
+}
+
+section {
+  width: 100%;
+  max-width: 420px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+article {
+  padding: 100px;
+  font-size: 2rem;
+  color: black;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+a,
+a:visited {
+  color: #fff;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+button,
+textarea {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+label,
+button {
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.5rem;
+}
+
+li {
+  list-style-type: none;
+}
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -5px;
+}
+
+.instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.hide {
+  display: none;
+}
+
+.valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.successmsg {
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.line {
+  display: inline-block;
+}
+
+.flexGrow {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.persistCheck {
+  font-size: 0.75rem;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.persistCheck label {
+  margin: 0;
+}
+
+.video {
+  position: relative;
+  margin: auto;
+  border: 5px solid rgba(255, 255, 255, 0.788);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.video > #desc {
+  font-size: 0.725rem;
+}
+.video > #name {
+  font-size: 0.95rem;
+}
+.videos > *:nth-child(n + 2) {
+  margin-top: 15px;
+}
+.video > *:nth-child(n + 3) {
+  margin-top: 5px;
+}
+
+[type="checkbox"] {
+  height: 20px;
+  width: 20px;
+  margin: 0 5px 2px 2px;
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.upload-form > *:nth-child(n + 2) {
+  margin-top: 10px;
+}
+
+.upload-input {
+  width: 100%;
+  padding: 10px;
+  height: 50px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  font-family: Arial, sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.upload-input:focus {
+  border-color: #007bff;
+}
+
+.upload-textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.upload-textarea:focus {
+  border-color: #007bff;
+}
+.custom-file-upload {
+  display: inline-block;
+  border: 2px solid #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #f0f0f0;
+}
+
+.file-input {
+  display: none;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #81ecec;
+  border: 2px solid #00cec9;
+}
+
+.upload-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+}
+
+.upload-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.selected-file {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.file-name {
+  flex-grow: 1;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.upload-container {
+  position: relative;
+}
+
+.loading {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+}
+
+.loading {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.new-video {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.new-video-icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  font-size: 0.75rem;
+  gap: 2.5px;
+}
+
+.new-video-icon button {
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+.new-video-icon button:focus {
+  outline: none;
+}
+
+.new-video-icon button:hover {
+  opacity: 0.8;
+}
+
+.new-video-icon p {
+  color: white;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 0;
+}
+/* CSS for trash icon */
+.trash-icon {
+  position: absolute;
+  top: -5%;
+  right: -5%;
+  cursor: pointer;
+  color: #888888;
+  background-color: #f0f0f0;
+  padding: 7.5px 10px;
+  border-radius: 15%;
+}
+
+.trash-icon:hover {
+  color: #ff0000;
+}
+
+.delete-dialog {
+  position: fixed;
+  min-height: 300px;
+  min-width: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  color: black;
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.delete-dialog p {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.delete-dialog button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.delete-dialog button:hover {
+  opacity: 0.8;
+}
+
+.delete-dialog-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-dialog-btns button {
+}

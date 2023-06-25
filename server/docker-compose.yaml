@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    restart: always
+    healthcheck:
+      test: pg_isready -U postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ctoviot
+    ports:
+      - 5432:5432
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrations
+    environment:
+      - DB_SOURCE=postgresql://postgres:password@postgres:5432/ctoviot?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_SOURCE=postgresql://postgres:password@postgres:5432/ctoviot?sslmode=disable
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
