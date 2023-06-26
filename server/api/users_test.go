@@ -123,7 +123,7 @@ func TestCreateUserAPI(t *testing.T) {
 
 			tc.buildStubs(store)
 
-			server := newTestServer(t, store)
+			server := newTestServer(t, WithStore(store))
 			recorder := httptest.NewRecorder()
 
 			url := "/users/register"
@@ -243,7 +243,7 @@ func TestLoginUserAPI(t *testing.T) {
 			store := mockdb.NewMockStore(ctrl)
 			tc.buildStubs(store)
 
-			server := newTestServer(t, store)
+			server := newTestServer(t, WithStore(store))
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON

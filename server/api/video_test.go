@@ -2,7 +2,7 @@ package api
 
 import (
 	"bytes"
-	// "database/sql"
+
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -11,10 +11,10 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-	// "time"
+	"time"
 
 	mockdb "github.com/eyal-solomon1/ctoviot/db/mock"
-	// db "github.com/eyal-solomon1/ctoviot/db/sqlc"
+	db "github.com/eyal-solomon1/ctoviot/db/sqlc"
 	"github.com/eyal-solomon1/ctoviot/token"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -22,18 +22,18 @@ import (
 )
 
 func TestCreateVideoAPI(t *testing.T) {
-	// user, _ := createRandomUser(t)
+	user, _ := createRandomUser(t)
 
-	// var param gin.H = gin.H{
-	// 	"username": user.Username,
-	// 	"video_info": gin.H{
-	// 		"owner":             "John Doe",
-	// 		"video_name":        "My Video",
-	// 		"video_length":      int64(15),
-	// 		"video_remote_path": "/path/to/video",
-	// 		"video_decs":        "A sample video",
-	// 	},
-	// }
+	var param gin.H = gin.H{
+		"username": user.Username,
+		"video_info": gin.H{
+			"owner":             "John Doe",
+			"video_name":        "My Video",
+			"video_length":      int64(15),
+			"video_remote_path": "/path/to/video",
+			"video_decs":        "A sample video",
+		},
+	}
 
 	testCases := []struct {
 		name          string
@@ -42,29 +42,29 @@ func TestCreateVideoAPI(t *testing.T) {
 		setupAuth     func(t *testing.T, request *http.Request, tokenMaker token.Maker)
 		checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
 	}{
-		// {
-		// 	name:   "Happy scenario",
-		// 	params: param,
-		// 	buildStubs: func(store *mockdb.MockStore, aws *mockdb.MockAWS, openai *mockdb.MockOpenAI, ffmpeg *mockdb.MockFFMPEG) {
-		// 		// db
-		// 		store.EXPECT().GetUsersVideosCount(gomock.Any(), gomock.Eq(user.Username)).Times(1).Return(int64(1), nil)
-		// 		store.EXPECT().VideoTx(gomock.Any(), gomock.Any()).Times(1).Return(db.VideoTxResult{}, nil)
+		{
+			name:   "Happy scenario",
+			params: param,
+			buildStubs: func(store *mockdb.MockStore, aws *mockdb.MockAWS, openai *mockdb.MockOpenAI, ffmpeg *mockdb.MockFFMPEG) {
+				// db
+				store.EXPECT().GetUsersVideosCount(gomock.Any(), gomock.Eq(user.Username)).Times(1).Return(int64(1), nil)
+				store.EXPECT().VideoTx(gomock.Any(), gomock.Any()).Times(1).Return(db.VideoTxResult{}, nil)
 
-		// 		// services
-		// 		aws.EXPECT().CreateFile(gomock.Any(), gomock.Any()).Times(1).Return(nil, nil)
-		// 		openai.EXPECT().GetAudioTranscription(gomock.Any(), gomock.Any()).Times(1).Return("test transcription", nil)
-		// 		ffmpeg.EXPECT().CreateAudioFile(gomock.Any()).Times(1).Return("/audio/file/path", nil)
-		// 		ffmpeg.EXPECT().GetFileDuration(gomock.Any()).Times(1).Return(10.0, nil)
-		// 		ffmpeg.EXPECT().MatchTranscriptionsToVideo(gomock.Any(), gomock.Any()).Times(1).Return("/transcribed/file/path", nil)
+				// services
+				aws.EXPECT().CreateFile(gomock.Any(), gomock.Any()).Times(1).Return(nil, nil)
+				ffmpeg.EXPECT().CreateAudioFile(gomock.Any()).Times(1).Return("../assets/test.mp3", nil)
+				ffmpeg.EXPECT().GetFileDuration(gomock.Any()).Times(1).Return(10.0, nil)
+				openai.EXPECT().GetAudioTranscription(gomock.Any(), gomock.Any()).Times(1).Return("test transcription", nil)
+				ffmpeg.EXPECT().MatchTranscriptionsToVideo(gomock.Any(), gomock.Any()).Times(1).Return("../assets/ready.mp4", nil)
 
-		// 	},
-		// 	setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-		// 		addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
-		// 	},
-		// 	checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-		// 		require.Equal(t, http.StatusOK, recorder.Code)
-		// 	},
-		// },
+			},
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusOK, recorder.Code)
+			},
+		},
 		// {
 		// 	name:   "UserNotFound",
 		// 	params: param,
@@ -134,8 +134,8 @@ func TestCreateVideoAPI(t *testing.T) {
 		tc := testCases[i]
 		t.Run(tc.name, func(t *testing.T) {
 
-			filePath := filepath.Join("../assets", "test.mov")
-			fileName := "test.mov"
+			filePath := filepath.Join("../assets", "test.mp4")
+			fileName := "test.mp4"
 
 			body := new(bytes.Buffer)
 			writer := multipart.NewWriter(body)
@@ -153,7 +153,7 @@ func TestCreateVideoAPI(t *testing.T) {
 
 			tc.buildStubs(store, aws, openai, ffmpeg)
 
-			server := newTestServer(t, store)
+			server := newTestServer(t, WithStore(store), WithAWSService(aws), WithFFMPEGService(ffmpeg), WithOpenAIService(openai))
 			recorder := httptest.NewRecorder()
 
 			urlS := "/new_video"
